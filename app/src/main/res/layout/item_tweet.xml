@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="5dp"
+    android:layout_width="match_parent" android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tvName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:text="Name"
+        android:textAppearance="@style/TextAppearance.AppCompat.Body2" />
+
+    <TextView
+        android:id="@+id/tvBody"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_marginStart="0dp"
+        android:layout_marginLeft="5dp"
+        android:layout_marginTop="0dp"
+        android:layout_toEndOf="@+id/ivProfileImage"
+        android:text="Body" />
+
+    <ImageView
+        android:id="@+id/ivProfileImage"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:srcCompat="@android:color/black" />
+
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvBody"
+        android:layout_alignStart="@+id/tvBody"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:text="Date"
+        android:textAppearance="@style/TextAppearance.AppCompat.Small"
+        android:textSize="14sp" />
+
+    <TextView
+        android:id="@+id/tvUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_toEndOf="@+id/tvName"
+        android:text="Username" />
+
+    <ImageButton
+        android:id="@+id/ibFav"
+        android:layout_width="23dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tvDate"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibRetweet"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/ic_vector_heart_stroke" />
+
+    <ImageButton
+        android:id="@+id/ibRetweet"
+        android:layout_width="23dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tvDate"
+        android:layout_marginStart="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_toEndOf="@+id/ibReply"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/ic_vector_retweet_stroke" />
+
+    <ImageButton
+        android:id="@+id/ibReply"
+        android:layout_width="23dp"
+        android:layout_height="20dp"
+        android:layout_below="@+id/tvDate"
+        android:layout_alignStart="@+id/tvDate"
+        android:layout_marginStart="0dp"
+        android:layout_marginTop="5dp"
+        android:background="#00FFFFFF"
+        app:srcCompat="@drawable/ic_vector_messages_stroke" />
+
+</RelativeLayout>

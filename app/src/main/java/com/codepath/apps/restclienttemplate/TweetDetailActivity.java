@@ -29,6 +29,7 @@ public class TweetDetailActivity extends AppCompatActivity {
     public TextView tvRetweetCount;
     public TextView tvFavCount;
     public ImageView ivVerified;
+    public ImageView ivMedia;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +50,7 @@ public class TweetDetailActivity extends AppCompatActivity {
         tvFavCount = findViewById(R.id.tvFavCountDetail);
         tvRetweetCount = findViewById(R.id.tvRetweetCountDetail);
         ivVerified = findViewById(R.id.ivVerifiedDetail);
+        ivMedia = findViewById(R.id.ivTweetImageDetails);
 
         //ivVerified.setVisibility(View.GONE);
 
@@ -106,6 +108,16 @@ public class TweetDetailActivity extends AppCompatActivity {
 
         if(tweet.user.verified.equals("false")){
             ivVerified.setVisibility(View.GONE);
+        }
+
+        if(tweet.mediaUrl != null){
+            Glide.with(getApplicationContext())
+                    .load(tweet.mediaUrl)
+                    .bitmapTransform(new RoundedCornersTransformation(getApplicationContext(),50, 0))
+                    .into(ivMedia);
+        }
+        else {
+            ivMedia.setVisibility(View.GONE);
         }
     }
 }

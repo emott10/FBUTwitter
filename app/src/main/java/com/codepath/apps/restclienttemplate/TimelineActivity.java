@@ -26,7 +26,7 @@ import cz.msebera.android.httpclient.Header;
 
 public class TimelineActivity extends AppCompatActivity {
 
-    private TwitterClient client;
+    public static TwitterClient client;
     private SwipeRefreshLayout swipeContainer;
     private DividerItemDecoration space;
     TweetAdapter tweetAdapter;

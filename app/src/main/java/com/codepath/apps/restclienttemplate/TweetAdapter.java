@@ -69,7 +69,6 @@ public class TweetAdapter extends RecyclerView.Adapter<TweetAdapter.ViewHolder> 
         context = viewGroup.getContext();
         LayoutInflater inflater = LayoutInflater.from(context);
         client = TimelineActivity.client;
-                //TwitterApplication.getRestClient(context);
 
         View tweetView = inflater.inflate(R.layout.item_tweet, viewGroup, false);
         ViewHolder viewHolder = new ViewHolder(tweetView);

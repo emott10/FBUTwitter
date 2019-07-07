@@ -14,7 +14,7 @@
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         app:counterEnabled="true"
-        app:counterMaxLength="140"
+        app:counterMaxLength="280"
         app:counterOverflowTextAppearance="@style/TextLimitError"
         app:counterTextAppearance="@style/TextLimitStyle"
         app:layout_constraintEnd_toEndOf="parent"

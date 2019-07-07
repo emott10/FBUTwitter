@@ -33,6 +33,8 @@ public class TimelineActivity extends AppCompatActivity {
     ArrayList<Tweet> tweets;
     RecyclerView rvTweets;
     ImageButton btnCompose;
+    // Store a member variable for the listener
+    private EndlessRecyclerViewScrollListener scrollListener;
 
 
     @Override
@@ -42,6 +44,7 @@ public class TimelineActivity extends AppCompatActivity {
 
         ActionBar ab = getSupportActionBar();
         ab.setTitle("Home");
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getApplicationContext());
 
         client = TwitterApplication.getRestClient(TimelineActivity.this);
         //find recycler view
@@ -51,9 +54,22 @@ public class TimelineActivity extends AppCompatActivity {
         //construct the adapter from this data source
         tweetAdapter = new TweetAdapter(tweets);
         //RecyclerView setup (layout manager, use adapter)
-        rvTweets.setLayoutManager(new LinearLayoutManager(this));
+        rvTweets.setLayoutManager(linearLayoutManager);
         //set the adapter
         rvTweets.setAdapter(tweetAdapter);
+
+        // Retain an instance so that you can call `resetState()` for fresh searches
+        scrollListener = new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount, RecyclerView view) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                fetchTimelineAsync(true);
+                //loadNextDataFromApi(page);
+            }
+        };
+        // Adds the scroll listener to RecyclerView
+        rvTweets.addOnScrollListener(scrollListener);
         btnCompose = findViewById(R.id.btnCompose);
 
         btnCompose.setOnClickListener(new View.OnClickListener() {
@@ -63,7 +79,8 @@ public class TimelineActivity extends AppCompatActivity {
                 startActivityForResult(i, 20);
             }
         });
-        populateTimeline();
+        //populateTimeline();
+        fetchTimelineAsync(false);
 
         // Lookup the swipe container view
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -74,7 +91,7 @@ public class TimelineActivity extends AppCompatActivity {
                 // Your code to refresh the list here.
                 // Make sure you call swipeContainer.setRefreshing(false)
                 // once the network request has completed successfully.
-                fetchTimelineAsync(0);
+                fetchTimelineAsync(false);
             }
         });
         // Configure the refreshing colors
@@ -84,19 +101,31 @@ public class TimelineActivity extends AppCompatActivity {
                 android.R.color.holo_red_light);
     }
 
-    public void fetchTimelineAsync(int page) {
+
+    public void fetchTimelineAsync(final boolean fetchMore) {
         // Send the network request to fetch the updated data
         // `client` here is an instance of Android Async HTTP
         // getHomeTimeline is an example endpoint.
-        client.getHomeTimeline(new JsonHttpResponseHandler() {
+        long maxId;
+
+        if(fetchMore) {
+            maxId = tweets.get(tweets.size() - 1).uid;
+            maxId--;
+        }
+        else {
+            maxId = -1;
+        }
+        client.getHomeTimeline(maxId, new JsonHttpResponseHandler() {
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONArray response) {
                 // Remember to CLEAR OUT old items before appending in the new ones
-                tweetAdapter.clear();
+                if(!fetchMore) {
+                    tweetAdapter.clear();
+                }
                 // ...the data has come back, add new items to your adapter...
                 //iterate through the JSON array
                 //for each entry, deserialize the JSON object
-                for(int i = 0; i < response.length(); i++){
+                for (int i = 0; i < response.length(); i++) {
                     //convert each object to a tweet model
                     //add that tweet model to our data source
                     //notify the adapter has changed
@@ -104,7 +133,7 @@ public class TimelineActivity extends AppCompatActivity {
                         Tweet tweet = Tweet.fromJSON(response.getJSONObject(i));
                         tweets.add(tweet);
 
-                        if(space != null){
+                        if (space != null) {
                             rvTweets.removeItemDecoration(space);
                         }
 
@@ -113,7 +142,7 @@ public class TimelineActivity extends AppCompatActivity {
                         rvTweets.addItemDecoration(space);
 
                         tweetAdapter.notifyItemInserted(tweets.size() - 1);
-                    }catch(JSONException e){
+                    } catch (JSONException e) {
                         e.printStackTrace();
                     }
                 }
@@ -131,7 +160,7 @@ public class TimelineActivity extends AppCompatActivity {
 
 
     private void populateTimeline() {
-        client.getHomeTimeline(new JsonHttpResponseHandler(){
+        client.getHomeTimeline(-1, new JsonHttpResponseHandler(){
             @Override
             public void onSuccess(int statusCode, Header[] headers, JSONObject response) {
                 Log.d("TwitterClient", response.toString());
@@ -198,5 +227,6 @@ public class TimelineActivity extends AppCompatActivity {
             rvTweets.smoothScrollToPosition(0);
         }
     }
+
 }
 
